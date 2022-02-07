@@ -54,7 +54,7 @@ dbo.connectToServer(function (err) {
 			getData(db.collection('nests'));
 		}, 100000);
 
-		app.listen(9000, () => console.log('Listening on port 9000'));
+		app.listen(80, () => console.log('Listening on port 9000'));
 	}
 
 });
