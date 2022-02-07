@@ -16,7 +16,7 @@ app.post("/update", function (req, res) {
 });
 
 
-app.listen(80);
+app.listen(process.env.PORT || 80);
 
 // dbo.connectToServer(function (err) {
 // 	if (err) {
