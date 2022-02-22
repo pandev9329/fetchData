@@ -52,6 +52,34 @@ dbo.connectToServer(function (err) {
 			res.json({data: list});
 		})
 
+		app.post("/get_daily_nest", async function(req, res) {
+			var list = await db.collection('nests').aggregate([
+				{
+					$project: {
+						createdAt: {
+							$dateToString: {
+								"format": "%Y-%m-%d",
+								"date": {
+									$toDate: {
+										$multiply: [{
+											$toInt: "$createTime"
+										}, 1000]
+									}
+								}
+							}
+						}
+					}
+				},
+				{
+					$group: {"_id": "$createdAt", "count": {$sum: 1}}
+				},
+					{
+						$sort: {"_id": 1}
+					}
+			]).toArray();
+			res.json({data: list});
+		});
+
 
 
 		async function setPrevData() {
@@ -72,7 +100,7 @@ dbo.connectToServer(function (err) {
 		setInterval(() => {
 			getData(db.collection('nests'));
 			getNftdata(db.collection('nfts'));
-		}, 100000);
+		}, 10000);
 
 
 		app.listen(process.env.PORT || 4000, () => console.log('Listening on port 4000'));
